@@ -2,3 +2,5 @@ langchain
 langchain-google-genai
 huggingface-hub
 langchain_community
+streamlit
+python-dotenv
