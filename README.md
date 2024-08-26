@@ -3,7 +3,7 @@
 
 # Chat Models
 - List of All the chat models
-- ![ChatModels](https://python.langchain.com/v0.2/docs/integrations/chat/)
+- [ChatModels](https://python.langchain.com/v0.2/docs/integrations/chat/)
 
 - Here we can use googele generative ai.
 - python```
