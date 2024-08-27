@@ -1,0 +1,92 @@
+# ---------------------------------------Importing Libraries---------------------------------------#
+from langchain_core.messages import SystemMessage,HumanMessage,AIMessage
+from langchain.prompts import ChatPromptTemplate
+from langchain_huggingface import ChatHuggingFace
+from langchain_community.document_loaders.text import TextLoader
+from langchain.text_splitter import CharacterTextSplitter
+from langchain_cohere import CohereEmbeddings
+from pinecone import Pinecone, ServerlessSpec
+import pinecone
+import numpy as np
+from dotenv import load_dotenv
+import os
+load_dotenv()
+co_api=os.environ['cohere_api']
+
+# Vectore Store https://python.langchain.com/v0.2/docs/integrations/vectorstores/
+#------------------------------------------------------------------------------------------------#
+
+# Steps to run the code
+# 1- Load the document
+# 2- Split the document into chunks
+# 3- Convert the chunks into embedding
+# 4- Save the embedding into vector db
+# ------------------------------------------------------------------------------------------------#
+
+# Load the document
+file_path = "RAG/doc/wikipedia.txt"
+persist_directory=os.path.join("RAG/Db","wikipedia_db")
+
+doc_loader=TextLoader(file_path=file_path)
+doc=doc_loader.load()
+
+print("\n=====Doc==========\n",doc)
+print(f"=====Length: {len(doc)}")
+
+# =============================Split the text into chunks===================================#
+text_spliter=CharacterTextSplitter(chunk_size=100,chunk_overlap=0)
+doc_chunks=text_spliter.split_documents(documents=doc)
+
+print("============Document Chunks Information===============")
+print(f"=====Total chunks : {len(doc_chunks)}")
+print(f"=====First Chunk=====\n {doc_chunks[0].page_content}")
+
+# =============================Text Into Embedding===================================#
+try:
+    embeddings_function = CohereEmbeddings(model="embed-english-light-v3.0",
+                                        cohere_api_key="HMYlZTLMskrr4ClxQC8vxnz64LxuMN66SmMfWsne")
+    
+    # chunk_text=[chunk.page_content for chunk in doc_chunks]
+
+    # # Embeddings
+    # embeddings=embeddings_function.embed_documents(chunk_text)
+
+    # embeddings=np.array(embeddings, dtype=np.float32)
+except Exception as e:
+    print(f"This Error Occur: => {e}")
+
+# =============================Create a chroma Vector Store======================# 
+try:
+    pine_cone_api="2d643d8a-366e-46ca-b6bf-0958a336ee66"
+
+
+    pc = Pinecone(
+        api_key=pine_cone_api
+    )
+
+    # Now do stuff
+    if 'testing' not in pc.list_indexes().names():
+        index=pc.create_index(
+            name='testing',
+            dimension=384,
+            metric='euclidean',
+            spec=ServerlessSpec(
+                cloud='aws',
+                region='us-east-1'
+            )
+        )
+    else:
+        index=pc.Index('testing', metric="cosine", spec=ServerlessSpec(cloud='aws', region='us-east-1'))
+    
+    # Generate embeddings for each document chunk and upsert into Pinecone
+    embeddings=[embeddings_function.embed_query(chunk.page_content)  for chunk in doc_chunks]
+
+    # get the vectors
+    vectors=[(str(i),emb_vec) for i,emb_vec in enumerate(embeddings) ]
+    
+    index.upsert(vectors)
+    print("Vetors Uploaded successfully")
+    print("===========Vectore Store Created=========")
+except Exception as e:
+    print(f"========Vector Db error ==> {e}")
+

@@ -1,0 +1,40 @@
+History
+In 1973, the ISO Technical Committee 68 decided to develop codes for the representation of currencies and funds for use in any application of trade, commerce or banking. At the 17th session (February 1978), the related UN/ECE Group of Experts agreed that the three-letter alphabetic codes for International Standard ISO 4217, "Codes for the representation of currencies and funds", would be suitable for use in international trade.
+
+Over time, new currencies are created and old currencies are discontinued. Such changes usually originate from the formation of new countries, treaties between countries on shared currencies or monetary unions, or redenomination from an existing currency due to excessive inflation. As a result, the list of codes must be updated from time to time. The ISO 4217 maintenance agency is responsible for maintaining the list of codes.[3]
+
+Types of codes
+
+A list of exchange rates for various base currencies given by a money changer in Thailand, with the Thailand Baht as the counter (or quote) currency. Note the Korean currency code should be KRW.
+National currencies
+In the case of national currencies, the first two letters of the alpha code are the two letters of the ISO 3166-1 alpha-2 country code and the third is usually the initial of the currency's main unit.[4] So Japan's currency code is JPY: "JP" for Japan and "Y" for yen. This eliminates the problem caused by the names dollar, franc, peso and pound being used in dozens of countries, each having significantly differing values. While in most cases the ISO code resembles an abbreviation of the currency's full English name, this is not always the case, as currencies such as the Algerian dinar, Aruban florin, Cayman dollar, renminbi, sterling and the Swiss franc have been assigned codes which do not closely resemble abbreviations of the official currency names.
+
+In some cases, the third letter of the alpha code is not the initial letter of a currency unit name. There may be a number of reasons for this:
+
+It is considered important that the code of a completely new currency be highly mnemonic if possible. An example is the assignment of the code EUR to the euro. ISO 4217 amendment 94,[5] which created this code, states "The code element 'EU' has been reserved by the ISO 3166 Maintenance Agency for use within ISO 4217 where 'R' has been appended to make an acceptable mnemonic code." Here the R comes from the third letter in the word "euro".
+The currency in question is replacing another currency of the same name, due to revaluation. So that the two currencies have different codes, a different third letter must be chosen for the code of the new currency. In some cases, the third letter is the initial for "new" in that country's language, to distinguish it from an older currency that was revalued; the code sometimes outlasts the usage of the term "new" itself (for example, the code for the Mexican peso is MXN, reflecting its 1993 revaluation). Another solution to a revalued currency having the same name as its predecessor is to choose a third letter which results in a 3-letter code with mnemonic significance. For example, the Russian ruble changed from RUR to RUB following a revaluation, where the B comes from the third letter in the word "ruble".[citation needed]
+Part of a series on
+Numismatics
+the study of currency
+
+Glossary
+Currency
+History of money
+Production
+Collection
+ Numismatics portalicon Money portal
+vte
+X currencies (funds, precious metals, supranationals, other)
+In addition to codes for most active national currencies ISO 4217 provides codes for "supranational" currencies, procedural purposes, and several things which are "similar to" currencies:
+
+Codes for the precious metals gold (XAU), silver (XAG), palladium (XPD), and platinum (XPT) are formed by prefixing the element's chemical symbol with the letter "X". These "currency units" are defined as one troy ounce of the specified metal.
+The code XTS is reserved for use in testing.
+The code XXX is used to denote a "transaction" involving no currency.
+There are also codes specifying certain monetary instruments used in international finance, e.g. XDR is the symbol for special drawing right issued by the International Monetary Fund.
+The codes for most supranational currencies, such as the East Caribbean dollar, the CFP franc, the CFA franc BEAC and the CFA franc BCEAO. The predecessor to the euro, the European Currency Unit (ECU), had the code XEU.
+The use of an initial letter "X" for these purposes is facilitated by the ISO 3166 rule that no official country code beginning with X will ever be assigned.
+
+The inclusion of EU (denoting the European Union) in the ISO 3166-1 reserved codes list allows the euro to be coded as EUR rather than assigned a code beginning with X, even though it is a supranational currency.
+
+Numeric codes
+ISO 4217 also assigns a three-digit numeric code to each currency. This numeric code is usually the same as the numeric code assigned to the corresponding country by ISO 3166-1. For example, USD (United States dollar) has numeric code 840 which is also the ISO 3166-1 code for "US" (United States).
