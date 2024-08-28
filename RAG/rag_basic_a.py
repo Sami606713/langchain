@@ -7,6 +7,8 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_cohere import CohereEmbeddings
 from pinecone import Pinecone, ServerlessSpec
 import pinecone
+from langchain_community.vectorstores import FAISS 
+from langchain_community.vectorstores.chroma import Chroma
 import numpy as np
 from dotenv import load_dotenv
 import os
@@ -46,47 +48,16 @@ try:
     embeddings_function = CohereEmbeddings(model="embed-english-light-v3.0",
                                         cohere_api_key="HMYlZTLMskrr4ClxQC8vxnz64LxuMN66SmMfWsne")
     
-    # chunk_text=[chunk.page_content for chunk in doc_chunks]
-
-    # # Embeddings
-    # embeddings=embeddings_function.embed_documents(chunk_text)
-
-    # embeddings=np.array(embeddings, dtype=np.float32)
 except Exception as e:
     print(f"This Error Occur: => {e}")
 
 # =============================Create a chroma Vector Store======================# 
 try:
-    pine_cone_api="2d643d8a-366e-46ca-b6bf-0958a336ee66"
-
-
-    pc = Pinecone(
-        api_key=pine_cone_api
-    )
-
-    # Now do stuff
-    if 'testing' not in pc.list_indexes().names():
-        index=pc.create_index(
-            name='testing',
-            dimension=384,
-            metric='euclidean',
-            spec=ServerlessSpec(
-                cloud='aws',
-                region='us-east-1'
-            )
-        )
-    else:
-        index=pc.Index('testing', metric="cosine", spec=ServerlessSpec(cloud='aws', region='us-east-1'))
+    library=FAISS.from_documents(documents=doc_chunks,embedding=embeddings_function)
+    # library=Chroma.from_documents(documents=doc_chunks,embedding=embeddings_function,persist_directory=persist_directory)
     
-    # Generate embeddings for each document chunk and upsert into Pinecone
-    embeddings=[embeddings_function.embed_query(chunk.page_content)  for chunk in doc_chunks]
-
-    # get the vectors
-    vectors=[(str(i),emb_vec) for i,emb_vec in enumerate(embeddings) ]
-    
-    index.upsert(vectors)
-    print("Vetors Uploaded successfully")
     print("===========Vectore Store Created=========")
 except Exception as e:
     print(f"========Vector Db error ==> {e}")
 
+#===============================================================================================#
