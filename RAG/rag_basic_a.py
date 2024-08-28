@@ -5,8 +5,6 @@ from langchain_huggingface import ChatHuggingFace
 from langchain_community.document_loaders.text import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_cohere import CohereEmbeddings
-from pinecone import Pinecone, ServerlessSpec
-import pinecone
 from langchain_community.vectorstores import FAISS 
 from langchain_community.vectorstores.chroma import Chroma
 import numpy as np
