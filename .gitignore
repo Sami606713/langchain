@@ -2,3 +2,4 @@ venv/
 .env
 _pycache_/
 RAG/Db/
+projects/Q&A_System/Db/news_db/
