@@ -77,3 +77,7 @@ def get_similar(query,vector_store):
         print(f"====MeataData=={doc.metadata}==")
         print(f"====Documents===\n{doc.page_content}")
     return results
+
+# Get the query results
+def query_result():
+    pass

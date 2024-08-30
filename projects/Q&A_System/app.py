@@ -1,8 +1,9 @@
 #======================================Import PAckages======================================#
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_cohere import CohereEmbeddings
+from langchain_cohere import CohereEmbeddings,ChatCohere
 from langchain_community.vectorstores.faiss import FAISS
+from langchain_core.messages import HumanMessage,AIMessage,SystemMessage
 from langchain_huggingface import ChatHuggingFace
 import pandas as pd
 from utils import (get_txt_files,load_document,create_vector_store,get_similar)
@@ -49,3 +50,29 @@ except Exception as e:
 # Query
 query="who threat to Apples iTunes  Users of Apples music jukebox iTunes?"
 results=get_similar(query,library)
+
+# Combine the query and relevant document
+combine_input = (
+    "Here are some documents that might help answer the question: "
+    + query
+    + "\n\nRelevant Documents:\n\n"
+    + "\n\n".join([doc.page_content for doc in results])
+    + "\n\nPlease provide an answer based only on the provided documents. If the answer is not found, simply respond with 'I don't know'."
+)
+
+# Load the llm model
+llm=ChatCohere(cohere_api_key=os.environ['cohere_api'])
+
+# Set the human and system message
+messages=(
+    SystemMessage(content="You are a helpful assistant."),
+    HumanMessage(content=combine_input)
+)
+
+# get the response
+try:
+    response=llm.invoke(input=messages)
+    print("===========Final Response============")
+    print(response.content)
+except Exception as e:
+    print(f"Error is {e}")
