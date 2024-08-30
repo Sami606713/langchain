@@ -1,6 +1,11 @@
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores.faiss import FAISS
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains.history_aware_retriever import create_history_aware_retriever
+from langchain.chains.retrieval import create_retrieval_chain
+from langchain.prompts import ChatPromptTemplate,MessagesPlaceholder
+from langchain_core.messages import HumanMessage,AIMessage,SystemMessage
 import pandas as pd
 import os
 
@@ -79,5 +84,76 @@ def get_similar(query,vector_store):
     return results
 
 # Get the query results
-def query_result():
-    pass
+def make_rag_chain(llm,retriever):
+    # Set the custom prompt
+    print("Set the custom prompt")
+    coustom_sys_prompt=(
+        "Given a chat history and the latest user question"
+        "which might reference context in the history"
+        "formulate the standalone question which can be understood"
+        "with chat history donot answer the question, just"
+        "reformulate it if need and otherwise return it as is."
+    )
+
+    # Customize the prompt
+    coustomize_sys_prompt=ChatPromptTemplate.from_messages(
+        [
+            ("system",coustom_sys_prompt),
+            MessagesPlaceholder("chat_history"),
+            ("human","{input}")
+        ]
+    )
+
+    # Make the history aware retrieve
+    print("Set the history aware retriever")
+    history_aware_retriever=create_history_aware_retriever(llm=llm,
+                                                           retriever=retriever,
+                                                           prompt= coustomize_sys_prompt)
+
+    # make the question prompt
+    print("Set the question prompt")
+    ques_promt=(
+        "you are a assistant for question answering task."
+        "Use the following piece of retriever context to answe the question."
+        "if you dont't know the answer, just saty i don't know."
+        "Use three sentecen maximum and keep the answer concise.\n\n"
+        "{context}"
+    )
+    # Coustomize the question prompt
+    coustize_ques_prompt=ChatPromptTemplate(
+        [
+            ("system",ques_promt),
+            MessagesPlaceholder("chat_history"),
+            ("human","{input}")
+        ]
+    )
+
+    # Make a question chain
+    print("Set the quesiton answer chain")
+    question_answer_chain=create_stuff_documents_chain(llm,coustize_ques_prompt)
+
+    # make the rag_chain
+    print("Set the retriever chain")
+    rag_chain=create_retrieval_chain(history_aware_retriever,question_answer_chain)
+
+    return rag_chain
+
+
+def continue_chat(rag_chain):
+    try:
+        chat_history=[]
+        print("Start Chating With Ai and press 'q' to quit")
+
+        while True:
+            query=input("You: ")
+            if query=="q":
+                break
+            
+            response=rag_chain.invoke({"chat_history":chat_history,"input":query})
+            print(f"AI: {response['answer']}")
+
+            chat_history.append(HumanMessage(content=query))
+            chat_history.append(SystemMessage(content=response['answer']))
+
+    except Exception as e:
+        print("Error in continue chat is ",e)                                 
