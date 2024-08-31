@@ -54,7 +54,7 @@ except Exception as e:
 
 try:
     print('Query the vector db')
-    query="Apple new product"
+    query="apple intelegence?"
     print(query)
 
     retriever=library.as_retriever(search_type="similarity",
